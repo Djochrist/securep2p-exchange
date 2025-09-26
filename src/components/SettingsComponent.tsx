@@ -21,9 +21,9 @@ import {
 } from 'lucide-react';
 import UserModel from 'models/UserModel';
 import type { User } from 'types';
-
 interface SettingsComponentProps {
   onLogout: () => void;
+  setActiveTab: React.Dispatch<React.SetStateAction<'dashboard' | 'wallet' | 'messaging' | 'network' | 'settings' | 'contacts'>>;
 }
 
 const SettingsComponent: React.FC<SettingsComponentProps> = ({ onLogout }) => {

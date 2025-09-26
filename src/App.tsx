@@ -112,10 +112,16 @@ const App: React.FC = () => {
   };
 
   const addNotification = (message: string) => {
-    setNotifications(prev => [message, ...prev.slice(0, 4)]); // Garde seulement 5 notifications
+    setNotifications(prev => [message, ...prev.slice(0, 4)]); 
     setTimeout(() => {
       setNotifications(prev => prev.filter(notif => notif !== message));
     }, 5000);
+  };
+
+  // Fonction de navigation pour le Dashboard
+  const handleDashboardNavigate = (page: 'wallet' | 'messaging' | 'network' | 'settings') => {
+    console.log(`[DEBUG] App: handleDashboardNavigate called with ->`, page);
+    setActiveTab(page);
   };
 
   // Si aucun utilisateur connecté, affiche l'écran d'authentification
@@ -133,25 +139,25 @@ const App: React.FC = () => {
     { id: 'messaging', label: 'Messagerie', icon: MessageCircle },
     { id: 'network', label: 'Réseau', icon: Network },
     { id: 'settings', label: 'Paramètres', icon: Settings },
-    { id: 'contacts', label: 'Contacts', icon: UserIcon } // ajouté comme tu l'avais proposé
+    { id: 'contacts', label: 'Contacts', icon: UserIcon } 
   ] as const;
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'dashboard':
-        return <Dashboard />;
+        return <Dashboard onNavigate={handleDashboardNavigate} />;
       case 'wallet':
-        return <WalletComponent />;
+        return <WalletComponent setActiveTab={setActiveTab} />;
       case 'messaging':
-        return <MessagingComponent />;
+        return <MessagingComponent setActiveTab={setActiveTab} />;
       case 'network':
-        return <NetworkComponent />;
+        return <NetworkComponent setActiveTab={setActiveTab} />;
       case 'settings':
-        return <SettingsComponent onLogout={handleLogout} />;
+        return <SettingsComponent onLogout={handleLogout} setActiveTab={setActiveTab} />;
       case 'contacts':
-        return <ContactComponent />;
+        return <ContactComponent setActiveTab={setActiveTab} />;
       default:
-        return <Dashboard />;
+        return <Dashboard onNavigate={handleDashboardNavigate} />;
     }
   };
 

@@ -18,7 +18,11 @@ import {
 import WalletModel from 'models/WalletModel';
 import type { Transaction, Wallet as WalletType } from 'types';
 
-const WalletComponent: React.FC = () => {
+interface WalletComponentProps {
+  setActiveTab: React.Dispatch<React.SetStateAction<'dashboard' | 'wallet' | 'messaging' | 'network' | 'settings' | 'contacts'>>;
+}
+
+const WalletComponent: React.FC<WalletComponentProps> = ({ setActiveTab }) => {
   const [wallet, setWallet] = useState<WalletType | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [showSendModal, setShowSendModal] = useState(false);

@@ -15,8 +15,10 @@ import {
 } from 'lucide-react';
 import P2PNetwork from 'network/P2PNetwork';
 import type { Peer } from 'types';
-
-const NetworkComponent: React.FC = () => {
+interface NetworkComponentProps {
+  setActiveTab: React.Dispatch<React.SetStateAction<'dashboard' | 'wallet' | 'messaging' | 'network' | 'settings' | 'contacts'>>;
+}
+const NetworkComponent: React.FC<NetworkComponentProps> = ({ setActiveTab }) => {
   const [connectedPeers, setConnectedPeers] = useState<Peer[]>([]);
   const [discoveredPeers, setDiscoveredPeers] = useState<Peer[]>([]);
   const [networkStats, setNetworkStats] = useState({

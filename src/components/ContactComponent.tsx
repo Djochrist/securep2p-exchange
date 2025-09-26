@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+interface ContactComponentProps {
+  setActiveTab: React.Dispatch<React.SetStateAction<'dashboard' | 'wallet' | 'messaging' | 'network' | 'settings' | 'contacts'>>;
+}
 
 const developers = [
   {
@@ -11,7 +14,7 @@ const developers = [
         "Actuellement étudiant en Informatique à l’Université de Lubumbashi"
       ],
       realisations: ["Développement de plusieurs projets, dont une IA pour le trading"],
-      competences: ["C/C++", "Python", "HTML", "CSS", "JavaScript", "React", "Flutter", "SDL2", "PostgreSQL"],
+      competences: ["C/C++", "Python", "HTML", "CSS", "JavaScript", "Typescript", "React", "Flutter", "SDL2", "PostgreSQL"],
       centresInteret: ["Intelligence artificielle", "Blockchain", "Trading", "Cybersécurité", "Développement bas niveau", "Algorithmie", "Statistique"]
     }
   },
@@ -67,7 +70,7 @@ const developers = [
   }
 ];
 
-const ContactComponent: React.FC = () => {
+const ContactComponent: React.FC<ContactComponentProps> = ({ setActiveTab }) => {
   const [selectedDev, setSelectedDev] = useState<typeof developers[0] | null>(null);
 
   return (

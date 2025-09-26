@@ -4,7 +4,6 @@ import {
   Users, 
   MessageCircle, 
   Activity,
-  TrendingUp,
   Send,
   QrCode,
   Clock,
@@ -22,16 +21,29 @@ import type { Transaction } from 'types';
 
 // Props pour le composant Dashboard
 interface DashboardProps {
-  onNavigate: (page: string) => void;
+  onNavigate: (page: 'wallet' | 'messaging' | 'network' | 'settings') => void;
+}
+
+// Interfaces pour les modales
+interface SendTokensModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSend: (recipient: string, amount: number) => Promise<void>;
+}
+
+interface ReceiveTokensModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  address: string;
 }
 
 // Composant Modal pour l'envoi
-const SendTokensModal = ({ isOpen, onClose, onSend }) => {
+const SendTokensModal: React.FC<SendTokensModalProps> = ({ isOpen, onClose, onSend }) => {
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!recipient || !amount || parseFloat(amount) <= 0) return;
     
@@ -114,7 +126,7 @@ const SendTokensModal = ({ isOpen, onClose, onSend }) => {
 };
 
 // Composant Modal pour recevoir
-const ReceiveTokensModal = ({ isOpen, onClose, address }) => {
+const ReceiveTokensModal: React.FC<ReceiveTokensModalProps> = ({ isOpen, onClose, address }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopyAddress = async () => {
@@ -250,7 +262,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
     setUnreadMessages(messagingService.getUnreadMessagesCount());
   };
 
-  const handleSendTokens = async (recipient, amount) => {
+  const handleSendTokens = async (recipient: string, amount: number) => {
     try {
       console.log(`Envoi de ${amount} STP à ${recipient}`);
       loadDashboardData();
@@ -259,38 +271,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       console.error('Erreur lors de l\'envoi:', error);
       throw error;
     }
-  };
-
-  const handleAddTestTokens = async () => {
-    try {
-      await walletModel.addTestTokens(100);
-      setBalance(walletModel.getBalance());
-    } catch (error) {
-      console.error('Erreur lors de l\'ajout de tokens de test:', error);
-    }
-  };
-
-  // FONCTIONS DE NAVIGATION CORRIGÉES
-  const handleViewNetwork = () => {
-    console.log('Navigation vers la vue réseau');
-    onNavigate('network');
-  };
-
-  const handleViewMessages = () => {
-    console.log('Navigation vers la messagerie');
-    messagingService.markAsRead();
-    setUnreadMessages(0);
-    onNavigate('messages');
-  };
-
-  const handleNewMessage = () => {
-    console.log('Création d\'un nouveau message');
-    onNavigate('new-message');
-  };
-
-  const handleViewAllTransactions = () => {
-    console.log('Voir toutes les transactions');
-    onNavigate('transactions');
   };
 
   const getStatusIcon = (status: Transaction['status']) => {
@@ -347,7 +327,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             </p>
           </div>
           <button 
-            onClick={() => onNavigate('profile')}
+            onClick={() => onNavigate('settings')}
             className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-700"
           >
             <span>Mon profil</span>
@@ -374,17 +354,16 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           </div>
           <div className="mt-4 flex space-x-2">
             <button
-              onClick={() => setIsReceiveModalOpen(true)}
-              className="flex-1 bg-indigo-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 flex items-center justify-center space-x-1"
+              onClick={() => setIsSendModalOpen(true)}
+              className="flex-1 bg-indigo-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700"
             >
-              <QrCode className="w-4 h-4" />
-              <span>Recevoir</span>
+              Envoyer
             </button>
             <button
-              onClick={handleAddTestTokens}
-              className="flex-1 bg-gray-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
+              onClick={() => setIsReceiveModalOpen(true)}
+              className="flex-1 bg-green-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
             >
-              + Test
+              Recevoir
             </button>
           </div>
         </div>
@@ -407,11 +386,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           </div>
           <div className="mt-4">
             <button 
-              onClick={handleViewNetwork}
-              className="w-full bg-green-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700 flex items-center justify-center space-x-2"
+              onClick={() => onNavigate('network')}
+              className="w-full bg-green-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
             >
-              <Users className="w-4 h-4" />
-              <span>Voir le réseau</span>
+              Voir le réseau
             </button>
           </div>
         </div>
@@ -437,11 +415,14 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           )}
           <div className="mt-4">
             <button 
-              onClick={handleViewMessages}
-              className="w-full bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 flex items-center justify-center space-x-2"
+              onClick={() => {
+                messagingService.markAsRead();
+                setUnreadMessages(0);
+                onNavigate('messaging');
+              }}
+              className="w-full bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
             >
-              <MessageCircle className="w-4 h-4" />
-              <span>Messagerie</span>
+              Messagerie
             </button>
           </div>
         </div>
@@ -462,12 +443,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           </div>
           <div className="mt-4">
             <button 
-              onClick={handleViewAllTransactions}
-              className="w-full bg-purple-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 flex items-center justify-center space-x-2"
-            >
-              <Activity className="w-4 h-4" />
-              <span>Voir transactions</span>
-            </button>
+              onClick={() => onNavigate('wallet')}
+              className="w-full bg-purple-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700"
+          >
+            Voir transactions
+          </button>
           </div>
         </div>
       </div>
@@ -480,9 +460,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <button
             onClick={() => setIsSendModalOpen(true)}
-            className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group"
+            className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            <div className="bg-indigo-100 p-2 rounded-lg group-hover:bg-indigo-200 transition-colors">
+            <div className="bg-indigo-100 p-2 rounded-lg">
               <Send className="w-5 h-5 text-indigo-600" />
             </div>
             <div className="text-left">
@@ -493,9 +473,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
           <button
             onClick={() => setIsReceiveModalOpen(true)}
-            className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group"
+            className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            <div className="bg-green-100 p-2 rounded-lg group-hover:bg-green-200 transition-colors">
+            <div className="bg-green-100 p-2 rounded-lg">
               <QrCode className="w-5 h-5 text-green-600" />
             </div>
             <div className="text-left">
@@ -505,10 +485,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           </button>
 
           <button
-            onClick={handleNewMessage}
-            className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group"
+            onClick={() => onNavigate('messaging')}
+            className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            <div className="bg-blue-100 p-2 rounded-lg group-hover:bg-blue-200 transition-colors">
+            <div className="bg-blue-100 p-2 rounded-lg">
               <MessageCircle className="w-5 h-5 text-blue-600" />
             </div>
             <div className="text-left">
@@ -526,7 +506,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             Activité récente
           </h2>
           <button 
-            onClick={handleViewAllTransactions}
+            onClick={() => onNavigate('wallet')}
             className="text-indigo-600 hover:text-indigo-700 text-sm font-medium flex items-center space-x-1"
           >
             <Eye className="w-4 h-4" />
@@ -552,9 +532,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
                         ? `Vers ${formatAddress(transaction.toAddress)}`
                         : `De ${formatAddress(transaction.fromAddress)}`
                       }
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {transaction.timestamp.toLocaleString()}
                     </p>
                   </div>
                 </div>

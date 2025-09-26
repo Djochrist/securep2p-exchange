@@ -10,6 +10,18 @@ import {
   Paperclip,
   Smile
 } from 'lucide-react';
+interface MessagingComponentProps {
+  setActiveTab: React.Dispatch<React.SetStateAction<'dashboard' | 'wallet' | 'messaging' | 'network' | 'settings' | 'contacts'>>;
+}
+
+interface Contact {
+  id: string;
+  name: string;
+  address: string;
+  avatar?: string;
+  lastSeen: Date;
+  isOnline: boolean;
+}
 
 interface Contact {
   id: string;
@@ -37,7 +49,7 @@ interface Conversation {
   unreadCount: number;
 }
 
-const MessagingComponent: React.FC = () => {
+const MessagingComponent: React.FC<MessagingComponentProps> = ({ setActiveTab }) => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversation, setActiveConversation] = useState<string | null>(null);
   const [messageInput, setMessageInput] = useState('');
