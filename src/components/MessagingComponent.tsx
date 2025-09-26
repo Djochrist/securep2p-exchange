@@ -95,7 +95,7 @@ const MessagingComponent: React.FC<MessagingComponentProps> = ({ setActiveTab })
               ? "Hello, c'est Michael Losino. Bienvenue sur SecureP2P Exchange !"
               : contact.name === 'Carrel Kime'
               ? "Salut, ici Carrel Kime. N'hésite pas à tester la messagerie !"
-              : "Bienvenue, je suis Djochrist Kuma-Kuma, dev principal de l'application.",
+              : "Bienvenue, je suis Djochrist Kuma-Kuma, Kalimement toujours.",
           timestamp: new Date(Date.now() - 3600000 + index * 300000),
           isRead: true,
           isEncrypted: true
