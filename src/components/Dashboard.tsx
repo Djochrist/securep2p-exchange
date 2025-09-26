@@ -416,6 +416,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           <div className="mt-4">
             <button 
               onClick={() => {
+                console.log('[DEBUG] Dashboard: Messagerie button clicked'); 
                 messagingService.markAsRead();
                 setUnreadMessages(0);
                 onNavigate('messaging');
