@@ -6,7 +6,7 @@ interface ContactComponentProps {
 const developers = [
   {
     name: 'Djochrist Kuma-Kuma',
-    img: 'src/assets/djochrist.jpg',
+    img: new URL('../assets/djochrist.jpg', import.meta.url).href,
     details: {
       profil: "Étudiant en informatique à l’Université de Lubumbashi, passionné par les innovations technologiques de pointe et les paradigmes émergents du numérique, je préside avec fierté le Cercle Scientifique Math-Info et officie comme ambassadeur de prestigieux programmes académiques. Animé par une curiosité insatiable et un engagement intellectuel sans compromis, je m’investis pleinement dans les communautés scientifiques, œuvrant pour la diffusion du savoir et la promotion d’une culture scientifique éclairée",
       parcours: [
@@ -20,7 +20,7 @@ const developers = [
   },
   {
     name: 'Michael Losinu',
-    img: 'src/assets/michael.jpg',
+    img: new URL('../assets/michael.jpg', import.meta.url).href,
     details: {
       profil: "Je suis un étudiant en informatique passionné par la technologie, la programmation et l’innovation. Curieux et motivé, j’accorde une grande importance à la rigueur et à la fiabilité dans mon travail. Mon parcours atypique, débuté en commerce et gestion, m’a donné une solide base organisationnelle avant de me spécialiser en informatique, un domaine dans lequel je souhaite exceller et bâtir ma carrière.",
       parcours: [
@@ -45,7 +45,7 @@ const developers = [
   },
   {
     name: 'Carrel Kime',
-    img: 'src/assets/carrel.jpg',
+    img: new URL('../assets/carrel.jpg', import.meta.url).href,
     details: {
       profil: "Étudiant en informatique à l’Université de Lubumbashi, actuellement en Bac+2, après un parcours en Commercialisation et Gestion aux humanités. Passionné par la technologie, l’innovation, l’intelligence artificielle et les bases de données, je me forme chaque jour pour atteindre mes ambitions dans le développement web et le design numérique.",
       parcours: [

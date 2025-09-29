@@ -91,8 +91,8 @@ const MessagingComponent: React.FC<MessagingComponentProps> = ({ setActiveTab })
           id: `msg_${index}_1`,
           fromAddress: contact.address,
           content:
-            contact.name === 'Michael Losino'
-              ? "Hello, c'est Michael Losino. Bienvenue sur SecureP2P Exchange !"
+            contact.name === 'Michael Losinu'
+              ? "Hello, c'est Michael Losinu. Bienvenue sur SecureP2P Exchange !"
               : contact.name === 'Carrel Kime'
               ? "Salut, ici Carrel Kime. N'hésite pas à tester la messagerie !"
               : "Bienvenue, je suis Djochrist Kuma-Kuma, Kalimement toujours.",
