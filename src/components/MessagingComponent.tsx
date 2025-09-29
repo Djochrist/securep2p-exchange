@@ -64,7 +64,7 @@ const MessagingComponent: React.FC<MessagingComponentProps> = ({ setActiveTab })
     const testContacts: Contact[] = [
       {
         id: 'contact_1',
-        name: 'Michael Losino',
+        name: 'Michael Losinu',
         address: '0x1111111111111111111111111111111111111111',
         isOnline: true,
         lastSeen: new Date()
